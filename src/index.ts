@@ -1,7 +1,7 @@
 import { NextFunction } from 'express';
 import { Response } from 'express';
 import { Request } from 'express';
-import { PaginationAwareObject, paginate } from './pagination';
+import { PaginationAwareObject, paginate } from './helpers/pagination';
 import { SelectQueryBuilder } from 'typeorm';
 declare module "typeorm" {
     export interface SelectQueryBuilder<Entity> {
