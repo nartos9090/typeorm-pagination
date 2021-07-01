@@ -1,14 +1,28 @@
+import { plainToClass } from 'class-transformer';
 import { SelectQueryBuilder } from 'typeorm';
-export const paginate = async function(builder: SelectQueryBuilder<any>, page: number, per_page: number): Promise<PaginationAwareObject> {
+export const paginate = async function(builder: SelectQueryBuilder<any>, page: number, per_page: number, classTransform?: any): Promise<PaginationAwareObject> {
     let skip = (page-1)*per_page;
     const total = builder;
     const count = await total.getCount()
     const calcule_last_page = count % per_page;
     const last_page = calcule_last_page === 0 ? count / per_page : Math.trunc(count / per_page) + 1;
     let res = await builder
-    .skip(skip)
-    .take(per_page)
-    .getMany()
+        .skip(skip)
+        .take(per_page)
+        .getMany()
+
+    /**
+     * Modified by @nartos9090
+     * 
+     * Add support to transform class with classTransformer interceptor
+     */
+    let data
+    if (classTransform) {
+        data = plainToClass(classTransform, res)
+    } else {
+        data = res
+    }
+
     return {
         from:       skip<=count ? skip+1 : null,
         to:         (count > skip+per_page) ? skip+per_page : count,
@@ -18,7 +32,7 @@ export const paginate = async function(builder: SelectQueryBuilder<any>, page: n
         prev_page:  page > 1? (page-1): null,
         next_page:  count > (skip + per_page) ? page+1 : null,
         last_page:  last_page,
-        data:       res || []
+        data:       data || []
     }
 }
 
