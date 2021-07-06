@@ -24,19 +24,21 @@ export const paginate = async function(builder: SelectQueryBuilder<any>, page: n
     }
 
     return {
-        from:       skip<=count ? skip+1 : null,
-        to:         (count > skip+per_page) ? skip+per_page : count,
-        per_page:   per_page,
-        total:      count,
-        current_page: page,
-        prev_page:  page > 1? (page-1): null,
-        next_page:  count > (skip + per_page) ? page+1 : null,
-        last_page:  last_page,
+        pagination: {
+            from:         skip<=count ? skip+1 : null,
+            to:           (count > skip+per_page) ? skip+per_page : count,
+            per_page:     per_page,
+            total:        count,
+            current_page: page,
+            prev_page:    page > 1? (page-1): null,
+            next_page:    count > (skip + per_page) ? page+1 : null,
+            last_page:    last_page,
+        },
         data:       data || []
     }
 }
 
-export interface PaginationAwareObject {
+export interface PaginationMainObject {
     from: any,
     to: any,
     per_page: any,
@@ -45,5 +47,9 @@ export interface PaginationAwareObject {
     prev_page?: number|null,
     next_page?: number|null,
     last_page: number|null
+}
+
+export interface PaginationAwareObject {
+    pagination: PaginationMainObject,
     data: Array<object|any>|any
 }
