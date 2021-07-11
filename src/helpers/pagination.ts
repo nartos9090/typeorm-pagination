@@ -1,6 +1,6 @@
 import { plainToClass } from 'class-transformer';
 import { SelectQueryBuilder } from 'typeorm';
-export const paginate = async function(builder: SelectQueryBuilder<any>, page: number, per_page: number, classTransform?: any): Promise<PaginationAwareObject> {
+export const paginate = async function(builder: SelectQueryBuilder<any>, page: number, per_page: number, classTransform?: any): Promise<PaginationAwareObject<object| any>> {
     let skip = (page-1)*per_page;
     const total = builder;
     const count = await total.getCount()
@@ -49,7 +49,7 @@ export interface PaginationMainObject {
     last_page: number|null
 }
 
-export interface PaginationAwareObject {
+export interface PaginationAwareObject<T> {
     pagination: PaginationMainObject,
-    data: Array<object|any>|any
+    data: Array<T>|any
 }
