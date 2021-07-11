@@ -5,8 +5,8 @@ import { PaginationAwareObject, paginate } from './helpers/pagination';
 import { SelectQueryBuilder } from 'typeorm';
 declare module "typeorm" {
     export interface SelectQueryBuilder<Entity> {
-        paginate(per_page?: number|null): Promise<PaginationAwareObject<object | any>>;
-        paginate(classTransform?: any|number|null, per_page?: number|null): Promise<PaginationAwareObject<object | any>>;
+        paginate(per_page?: number|null): Promise<PaginationAwareObject>;
+        paginate(classTransform?: any|number|null, per_page?: number|null): Promise<PaginationAwareObject>;
     }
 }
 
@@ -21,7 +21,7 @@ export function pagination(req: Request, res: Response, next: NextFunction):void
      * 
      * Add support to transform class with classTransformer interceptor
      */
-    SelectQueryBuilder.prototype.paginate = async function(classTransformOrPerPage?: any|number|null, per_page?: number|null): Promise<PaginationAwareObject<object | any>> {
+    SelectQueryBuilder.prototype.paginate = async function(classTransformOrPerPage?: any|number|null, per_page?: number|null): Promise<PaginationAwareObject> {
         let classTransform
         if (typeof classTransformOrPerPage == 'number' && isFinite(classTransformOrPerPage)) {
             per_page = classTransformOrPerPage
