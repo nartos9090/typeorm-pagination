@@ -5,8 +5,8 @@ import { PaginationAwareObject, paginate } from './helpers/pagination';
 import { SelectQueryBuilder } from 'typeorm';
 declare module "typeorm" {
     export interface SelectQueryBuilder<Entity> {
-        paginate(per_page?: number|null): Promise<PaginationAwareObject>;
-        paginate(classTransform?: any|number|null, per_page?: number|null): Promise<PaginationAwareObject>;
+        paginate(per_page?: number|null): Promise<PaginationAwareObject<T>>;
+        paginate(classTransform?: any|number|null, per_page?: number|null): Promise<PaginationAwareObject<T>>;
     }
 }
 
